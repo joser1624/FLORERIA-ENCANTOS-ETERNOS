@@ -362,7 +362,7 @@
               <p>📍 Jr. Libertad 234, Mercado Central, Sicuani</p>
               <p>📞 +51 98 765 4321</p>
               <p>🕐 Lun–Sáb 7:00am – 7:00pm</p>
-              <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82eaedeee3c2e7ece1e3ecf6edf1e7f6e7f0ecedf1acf2e7">[email&#160;protected]</a></p>
+              <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="432b2c2f2203262d20222d372c30263726312d2c306d3326">[email&#160;protected]</a></p>
             </div>
           </div>
         </div>
@@ -463,4 +463,21 @@
       if (heroImg) {
         const wrap = document.getElementById('heroImgWrap');
         if (wrap) {
-          wrap.innerHTML = `<img src="${heroImg}" alt="
+          wrap.innerHTML = `<img src="${heroImg}" alt="Portada Encantos Eternos" style="width:280px;height:280px;object-fit:cover;border-radius:50%;border:4px solid var(--mostaza);box-shadow:0 12px 40px rgba(78,46,21,.25);position:relative;z-index:1;">`;
+        }
+      }
+
+      // Cargar fotos de productos desde admin
+      const fotosAdmin = JSON.parse(localStorage.getItem('encantos_fotos_admin') || '[]');
+      const fotosEventos = fotosAdmin.filter(f => f.seccion === 'eventos');
+      if (fotosEventos.length > 0) {
+        // Enriquecer cards de eventos con foto de fondo si corresponde
+        fotosEventos.forEach(f => {
+          const headers = document.querySelectorAll('.ev3-header');
+          // Decorativo: no aplicamos por defecto para no romper estilos
+        });
+      }
+    });
+  </script>
+</body>
+</html>
