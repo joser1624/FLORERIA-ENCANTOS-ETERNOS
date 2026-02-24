@@ -11,14 +11,12 @@
 </head>
 <body>
 
-  <!-- AVISO SUPERIOR -->
   <div class="top-aviso">
     <span>🌻</span>
     <span>Flores frescas del campo cada mañana · Envío a domicilio en Sicuani y alrededores</span>
     <span>🌻</span>
   </div>
 
-  <!-- NAVBAR -->
   <header class="site-header3 sticky-top" id="inicio3">
     <nav class="navbar navbar-expand-lg">
       <div class="container">
@@ -40,9 +38,20 @@
             <li class="nav-item"><a class="nav-link3" href="#eventos3">🎉 Eventos</a></li>
             <li class="nav-item"><a class="nav-link3" href="#regalos3">Regalos</a></li>
             <li class="nav-item"><a class="nav-link3" href="#footer3">Contacto</a></li>
+            <li class="nav-item cart-nav-item" style="display:none;">
+              <a class="nav-link3" href="#" id="cartNavBtn">
+                <i class="bi bi-cart3"></i>
+                <span class="cart-badge" style="display:none;">0</span>
+              </a>
+            </li>
+            <li class="nav-item" id="authNavItem">
+              <a class="nav-link3" href="login.html" id="loginNavBtn">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
+              </a>
+            </li>
           </ul>
           <form class="search3-form" onsubmit="return false;">
-            <input type="search" class="search3-input" placeholder="¿Qué buscas?…" />
+            <input type="search" class="search3-input" placeholder="¿Qué buscas?…" id="searchInput" />
             <button class="search3-btn" type="submit"><i class="bi bi-search"></i></button>
           </form>
         </div>
@@ -50,13 +59,10 @@
     </nav>
   </header>
 
-  <!-- HERO -->
   <section class="hero3">
     <div class="andean-stripe top-stripe" aria-hidden="true"><div class="stripe-pattern"></div></div>
-
     <div class="container h-100">
       <div class="row align-items-center h-100 py-5">
-
         <div class="col-lg-6 hero3-content">
           <div class="handmade-tag">✦ Con todo el cariño del Cusco ✦</div>
           <h1 class="hero3-title">
@@ -75,11 +81,13 @@
             <span class="chip">📞 WhatsApp directo</span>
           </div>
         </div>
-
         <div class="col-lg-6 d-none d-lg-flex justify-content-center">
           <div class="hero3-visual">
             <div class="hero3-circle-bg"></div>
-            <div class="hero3-big-flower">🌺</div>
+            <!-- Imagen dinámica del hero -->
+            <div class="hero3-img-wrap" id="heroImgWrap">
+              <div class="hero3-big-flower" id="heroBigFlower">🌺</div>
+            </div>
             <div class="hero3-float float-a">
               <span class="float-emoji">🌹</span>
               <div><strong>Rosas Rojas</strong><small>Desde S/ 25</small></div>
@@ -93,14 +101,11 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
     <div class="andean-stripe bottom-stripe" aria-hidden="true"><div class="stripe-pattern"></div></div>
   </section>
 
-  <!-- SERVICIOS -->
   <section class="servicios3">
     <div class="container">
       <div class="row g-3 justify-content-center">
@@ -120,7 +125,18 @@
     </div>
   </section>
 
-  <!-- FILTROS -->
+  <!-- Galería destacada (se llena dinámicamente si hay fotos subidas) -->
+  <section class="galeria3" id="galeria3" style="display:none;">
+    <div class="container">
+      <div class="section3-header text-center">
+        <div class="section3-deco" aria-hidden="true">🌸</div>
+        <h2 class="section3-title">Nuestras creaciones</h2>
+        <p class="section3-sub">Fotos reales de nuestros arreglos 💐</p>
+      </div>
+      <div class="row g-3 mt-3" id="galeriaGrid"></div>
+    </div>
+  </section>
+
   <section class="categorias3" id="categorias3">
     <div class="container">
       <div class="section3-header text-center">
@@ -138,131 +154,12 @@
     </div>
   </section>
 
-  <!-- PRODUCTOS -->
   <section class="productos3" id="productos3">
     <div class="container">
       <div class="row g-4" id="productsGrid3">
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="amor aniversario">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🌹</div><div class="p3-ribbon">Oferta</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Amor · Aniversario</div>
-              <h4 class="p3-name">Ramo de Rosas Rojas</h4>
-              <p class="p3-desc">24 rosas frescas con moño de cinta y tarjetita incluida.</p>
-              <div class="p3-footer">
-                <div class="p3-price-wrap"><span class="p3-old">S/ 85</span><span class="p3-price">S/ 65</span></div>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-warning" role="status"><span class="visually-hidden">Cargando...</span></div>
         </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="cumpleanos">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🌸</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Cumpleaños</div>
-              <h4 class="p3-name">Bouquet Colorido</h4>
-              <p class="p3-desc">Flores mixtas de temporada, alegres y llenas de vida.</p>
-              <div class="p3-footer">
-                <span class="p3-price">S/ 55</span>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="aniversario">
-          <div class="p3-card p3-especial">
-            <div class="p3-img"><div class="p3-emoji">💐</div><div class="p3-ribbon">⭐ Favorito</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Aniversario</div>
-              <h4 class="p3-name">Cajita de Flores</h4>
-              <p class="p3-desc">Caja tipo cofre con rosas y flores silvestres de los Andes.</p>
-              <div class="p3-footer">
-                <span class="p3-price">S/ 120</span>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="condolencias">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🕊️</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Condolencias</div>
-              <h4 class="p3-name">Corona de Liliums</h4>
-              <p class="p3-desc">Arreglo sereno con liliums blancos y follaje verde andino.</p>
-              <div class="p3-footer">
-                <span class="p3-price">S/ 90</span>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="amor">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🌷</div><div class="p3-ribbon">¡Nuevo!</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Amor</div>
-              <h4 class="p3-name">Tulipanes Rosados</h4>
-              <p class="p3-desc">20 tulipanes envueltos en papel kraft artesanal andino.</p>
-              <div class="p3-footer">
-                <span class="p3-price">S/ 75</span>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="cumpleanos">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🎁</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Cumpleaños</div>
-              <h4 class="p3-name">Canasta Sorpresa</h4>
-              <p class="p3-desc">Flores + chocolates artesanales + tarjeta personalizada.</p>
-              <div class="p3-footer">
-                <span class="p3-price">S/ 95</span>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="aniversario amor">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🌺</div><div class="p3-ribbon">Oferta</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Amor · Aniversario</div>
-              <h4 class="p3-name">Jardín en Miniatura</h4>
-              <p class="p3-desc">Peonías y rosas silvestres en canasta de mimbre local.</p>
-              <div class="p3-footer">
-                <div class="p3-price-wrap"><span class="p3-old">S/ 110</span><span class="p3-price">S/ 85</span></div>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-3 p3-col" data-category="condolencias">
-          <div class="p3-card">
-            <div class="p3-img"><div class="p3-emoji">🌿</div></div>
-            <div class="p3-body">
-              <div class="p3-tag">Condolencias</div>
-              <h4 class="p3-name">Ramo Blanco Puro</h4>
-              <p class="p3-desc">Crisantemos blancos con hojas verdes, sencillo y elegante.</p>
-              <div class="p3-footer">
-                <span class="p3-price">S/ 70</span>
-                <button class="btn3-comprar">Comprar 🛒</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
       <div id="noResults3" class="text-center py-5 d-none">
         <p style="font-size:2.5rem;">🌵</p>
@@ -271,7 +168,6 @@
     </div>
   </section>
 
-  <!-- EVENTOS -->
   <section class="eventos3" id="eventos3">
     <div class="container">
       <div class="section3-header text-center mb-5">
@@ -279,120 +175,98 @@
         <h2 class="section3-title">Decoramos tus eventos</h2>
         <p class="section3-sub">Desde una pachamanca familiar hasta una gran boda en el Cusco.<br>Ponemos las flores, tú pones la alegría 🎊</p>
       </div>
-
       <div class="row g-4">
-
         <div class="col-12 col-md-6 col-lg-4">
           <div class="ev3-card ev3-boda">
             <div class="ev3-header"><span class="ev3-ico">💒</span><div class="ev3-lines" aria-hidden="true"></div></div>
             <div class="ev3-body">
               <h3 class="ev3-title">Matrimonios</h3>
-              <p class="ev3-desc">Decoración floral completa: arco nupcial, centros de mesa, bouquet de novia, pétalos de entrada y más. ¡Todo coordinado!</p>
+              <p class="ev3-desc">Decoración floral completa: arco nupcial, centros de mesa, bouquet de novia, pétalos de entrada y más.</p>
               <ul class="ev3-list">
-                <li>🌹 Arco y altar floral</li>
-                <li>🌸 Centros de mesa</li>
-                <li>💐 Ramo de novia</li>
-                <li>🌿 Decoración de sillas</li>
+                <li>🌹 Arco y altar floral</li><li>🌸 Centros de mesa</li>
+                <li>💐 Ramo de novia</li><li>🌿 Decoración de sillas</li>
               </ul>
               <div class="ev3-from">Desde <strong>S/ 350</strong></div>
               <a href="#footer3" class="btn3-evento">Cotizar ahora →</a>
             </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6 col-lg-4">
           <div class="ev3-card ev3-quince">
             <div class="ev3-header"><span class="ev3-ico">👑</span><div class="ev3-lines" aria-hidden="true"></div></div>
             <div class="ev3-body">
               <h3 class="ev3-title">Quinceañeras</h3>
-              <p class="ev3-desc">Haz brillar el día de la quinceañera con flores tiernas y coloridas que combinan con cada vestido.</p>
+              <p class="ev3-desc">Haz brillar el día de la quinceañera con flores tiernas y coloridas.</p>
               <ul class="ev3-list">
-                <li>🌷 Ramo de la cumpleañera</li>
-                <li>🎀 Decoración del salón</li>
-                <li>🌸 Pulseras florales</li>
-                <li>📸 Arco para fotos</li>
+                <li>🌷 Ramo de la cumpleañera</li><li>🎀 Decoración del salón</li>
+                <li>🌸 Pulseras florales</li><li>📸 Arco para fotos</li>
               </ul>
               <div class="ev3-from">Desde <strong>S/ 180</strong></div>
               <a href="#footer3" class="btn3-evento">Cotizar ahora →</a>
             </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6 col-lg-4">
           <div class="ev3-card ev3-grado">
             <div class="ev3-header"><span class="ev3-ico">🎓</span><div class="ev3-lines" aria-hidden="true"></div></div>
             <div class="ev3-body">
               <h3 class="ev3-title">Graduaciones</h3>
-              <p class="ev3-desc">Celebra el esfuerzo con un ramo especial y decoración de mesas para la reunión familiar después de la ceremonia.</p>
+              <p class="ev3-desc">Celebra el esfuerzo con un ramo especial y decoración de mesas.</p>
               <ul class="ev3-list">
-                <li>🌻 Ramo de graduada/o</li>
-                <li>🌼 Centro de mesa familiar</li>
-                <li>🎉 Arreglo fotográfico</li>
-                <li>🍰 Flores para el pastel</li>
+                <li>🌻 Ramo de graduada/o</li><li>🌼 Centro de mesa familiar</li>
+                <li>🎉 Arreglo fotográfico</li><li>🍰 Flores para el pastel</li>
               </ul>
               <div class="ev3-from">Desde <strong>S/ 60</strong></div>
               <a href="#footer3" class="btn3-evento">Cotizar ahora →</a>
             </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6 col-lg-4">
           <div class="ev3-card ev3-fiestas">
             <div class="ev3-header"><span class="ev3-ico">🇵🇪</span><div class="ev3-lines" aria-hidden="true"></div></div>
             <div class="ev3-body">
               <h3 class="ev3-title">Fiestas Andinas</h3>
-              <p class="ev3-desc">Inti Raymi, Virgen del Carmen, Corpus Christi… Las flores son parte de nuestra cultura. Decoramos con orgullo y tradición.</p>
+              <p class="ev3-desc">Inti Raymi, Virgen del Carmen, Corpus Christi… Decoramos con orgullo y tradición.</p>
               <ul class="ev3-list">
-                <li>🌾 Arreglos tradicionales</li>
-                <li>🌸 Ofrendas florales</li>
-                <li>🎊 Decoración de andas</li>
-                <li>🌿 Guirnaldas artesanales</li>
+                <li>🌾 Arreglos tradicionales</li><li>🌸 Ofrendas florales</li>
+                <li>🎊 Decoración de andas</li><li>🌿 Guirnaldas artesanales</li>
               </ul>
               <div class="ev3-from">Desde <strong>S/ 80</strong></div>
               <a href="#footer3" class="btn3-evento">Cotizar ahora →</a>
             </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6 col-lg-4">
           <div class="ev3-card ev3-corp">
             <div class="ev3-header"><span class="ev3-ico">🏢</span><div class="ev3-lines" aria-hidden="true"></div></div>
             <div class="ev3-body">
               <h3 class="ev3-title">Eventos de Empresa</h3>
-              <p class="ev3-desc">Inauguraciones, aniversarios, reuniones especiales. Las flores dan bienvenida y alegría a cualquier espacio.</p>
+              <p class="ev3-desc">Inauguraciones, aniversarios, reuniones especiales.</p>
               <ul class="ev3-list">
-                <li>🌺 Arreglos de recepción</li>
-                <li>🌷 Centro de conferencias</li>
-                <li>🎁 Regalos corporativos</li>
-                <li>🏆 Flores para premiación</li>
+                <li>🌺 Arreglos de recepción</li><li>🌷 Centro de conferencias</li>
+                <li>🎁 Regalos corporativos</li><li>🏆 Flores para premiación</li>
               </ul>
               <div class="ev3-from">Desde <strong>S/ 120</strong></div>
               <a href="#footer3" class="btn3-evento">Cotizar ahora →</a>
             </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6 col-lg-4">
           <div class="ev3-card ev3-custom">
             <div class="ev3-header"><span class="ev3-ico">✨</span><div class="ev3-lines" aria-hidden="true"></div></div>
             <div class="ev3-body">
               <h3 class="ev3-title">¿Otro evento?</h3>
-              <p class="ev3-desc">¡No hay problema! Cuéntanos qué celebras y lo hacemos juntos. Desde una pachamanca hasta el bautizo de tu bebé.</p>
+              <p class="ev3-desc">¡No hay problema! Cuéntanos qué celebras y lo hacemos juntos.</p>
               <ul class="ev3-list">
-                <li>🤱 Bautizos y baby shower</li>
-                <li>🎄 Navidad y fiestas</li>
-                <li>🙏 Primeras comuniones</li>
-                <li>🎈 Cualquier celebración</li>
+                <li>🤱 Bautizos y baby shower</li><li>🎄 Navidad y fiestas</li>
+                <li>🙏 Primeras comuniones</li><li>🎈 Cualquier celebración</li>
               </ul>
               <div class="ev3-from">¡Conversemos!</div>
               <a href="#footer3" class="btn3-evento">Escríbenos →</a>
             </div>
           </div>
         </div>
-
       </div>
-
-      <!-- WhatsApp CTA -->
       <div class="whatsapp-callout text-center mt-5">
         <p class="wapp-text">¿Tienes un evento próximo? <strong>¡Escríbenos ahora!</strong> Te respondemos rápido 😊</p>
         <a href="https://wa.me/51987654321" target="_blank" class="btn3-wapp">
@@ -402,7 +276,6 @@
     </div>
   </section>
 
-  <!-- REGALOS -->
   <section class="regalos3" id="regalos3">
     <div class="container">
       <div class="section3-header text-center mb-5">
@@ -433,7 +306,7 @@
               <h3>Kit Andino de Amor</h3>
               <p>12 rosas · Caja de chocolates artesanales · Vela de lavanda · Tarjeta caligráfica · Moño de cinta tela andina</p>
               <div class="rbox-price"><span class="rbox-old">S/ 150</span><span class="rbox-new">S/ 115</span></div>
-              <button class="btn3-main mt-3">Quiero este regalo 💝</button>
+              <button class="btn3-main mt-3" onclick="document.getElementById('footer3').scrollIntoView({behavior:'smooth'})">Quiero este regalo 💝</button>
             </div>
           </div>
         </div>
@@ -441,7 +314,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer3" id="footer3">
     <div class="andean-stripe footer-stripe" aria-hidden="true"><div class="stripe-pattern"></div></div>
     <div class="footer3-top">
@@ -463,20 +335,16 @@
           <div class="col-6 col-md-2">
             <h6 class="f3-heading">Flores</h6>
             <ul class="f3-links">
-              <li><a href="#">Rosas</a></li>
-              <li><a href="#">Tulipanes</a></li>
-              <li><a href="#">Girasoles</a></li>
-              <li><a href="#">Liliums</a></li>
+              <li><a href="#">Rosas</a></li><li><a href="#">Tulipanes</a></li>
+              <li><a href="#">Girasoles</a></li><li><a href="#">Liliums</a></li>
               <li><a href="#">Flores andinas</a></li>
             </ul>
           </div>
           <div class="col-6 col-md-2">
             <h6 class="f3-heading">Eventos</h6>
             <ul class="f3-links">
-              <li><a href="#">Matrimonios</a></li>
-              <li><a href="#">Quinceañeras</a></li>
-              <li><a href="#">Graduaciones</a></li>
-              <li><a href="#">Corporativos</a></li>
+              <li><a href="#">Matrimonios</a></li><li><a href="#">Quinceañeras</a></li>
+              <li><a href="#">Graduaciones</a></li><li><a href="#">Corporativos</a></li>
               <li><a href="#">Fiestas andinas</a></li>
             </ul>
           </div>
@@ -494,7 +362,7 @@
               <p>📍 Jr. Libertad 234, Mercado Central, Sicuani</p>
               <p>📞 +51 98 765 4321</p>
               <p>🕐 Lun–Sáb 7:00am – 7:00pm</p>
-              <p>📧 hola@encantoseternos.pe</p>
+              <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82eaedeee3c2e7ece1e3ecf6edf1e7f6e7f0ecedf1acf2e7">[email&#160;protected]</a></p>
             </div>
           </div>
         </div>
@@ -514,11 +382,85 @@
     </div>
   </footer>
 
-  <button class="btn3-top" id="backTop3" aria-label="Volver arriba">
-    <i class="bi bi-chevron-up"></i>
-  </button>
+  <!-- Modal: Debes iniciar sesión -->
+  <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius:20px;border:2px solid #e8d5c4;">
+        <div class="modal-header" style="border-bottom:1px solid #e8d5c4;">
+          <h5 class="modal-title" style="color:#8b5a2b;font-family:'Caveat',cursive;font-size:1.5rem;">
+            <i class="bi bi-exclamation-triangle me-2" style="color:#d4a574;"></i>¡Atención!
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <p style="font-size:3rem;margin-bottom:15px">🌸</p>
+          <p style="color:#6b4e31;font-size:1.1rem">Debes iniciar sesión para poder comprar</p>
+        </div>
+        <div class="modal-footer" style="border-top:1px solid #e8d5c4;justify-content:center;">
+          <a href="login.html" class="btn3-main" style="padding:10px 30px;">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Modal: Carrito -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="border-radius:20px;border:2px solid #e8d5c4;">
+        <div class="modal-header" style="border-bottom:1px solid #e8d5c4;background:#fdf6e3;">
+          <h5 class="modal-title" style="color:#8b5a2b;font-family:'Caveat',cursive;font-size:1.5rem;">
+            <i class="bi bi-cart3 me-2" style="color:#d4a574;"></i>Tu Carrito de Compras
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="cartModalBody" style="max-height:400px;overflow-y:auto;"></div>
+        <div class="modal-footer" style="border-top:1px solid #e8d5c4;flex-direction:column;align-items:stretch;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <strong style="color:#6b4e31;font-size:1.1rem">Total:</strong>
+            <span id="cartTotal" style="color:#d4a574;font-size:1.4rem;font-weight:700;">S/ 0</span>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal" style="border-radius:12px;">Continuar Comprando</button>
+            <button type="button" class="btn flex-fill" id="checkoutBtn"
+              style="background:linear-gradient(135deg,#d4a574 0%,#c4956a 100%);color:#5c3d2e;font-weight:700;border-radius:12px;" disabled>
+              <i class="bi bi-whatsapp me-2"></i>Pedir por WhatsApp
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn3-top" id="backTop3" aria-label="Volver arriba"><i class="bi bi-chevron-up"></i></button>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="cart.js"></script>
+  <script src="newsletter.js"></script>
   <script src="app3.js"></script>
-</body>
-</html>
+  <script>
+    // Cargar galería dinámica desde admin
+    document.addEventListener('DOMContentLoaded', () => {
+      const fotos = JSON.parse(localStorage.getItem('encantos_galeria') || '[]');
+      const galeriaSection = document.getElementById('galeria3');
+      const galeriaGrid = document.getElementById('galeriaGrid');
+      if (fotos.length > 0 && galeriaGrid && galeriaSection) {
+        galeriaSection.style.display = '';
+        fotos.slice(0, 6).forEach(foto => {
+          galeriaGrid.innerHTML += `
+            <div class="col-6 col-md-4 col-lg-2">
+              <div style="border-radius:14px;overflow:hidden;aspect-ratio:1;border:2px solid var(--hueso-3);">
+                <img src="${foto.url}" alt="${foto.titulo}" style="width:100%;height:100%;object-fit:cover;transition:transform .3s;" 
+                  onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+              </div>
+            </div>`;
+        });
+      }
+      // Cargar imagen hero si hay
+      const heroImg = JSON.parse(localStorage.getItem('encantos_hero_img') || 'null');
+      if (heroImg) {
+        const wrap = document.getElementById('heroImgWrap');
+        if (wrap) {
+          wrap.innerHTML = `<img src="${heroImg}" alt="
