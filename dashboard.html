@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Admin – Encantos Eternos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --hueso: #fdf8f0; --hueso-2: #f5ede0; --hueso-3: #ede0cc;
+      --terracota: #c4622d; --terra-dk: #a34e20; --terra-lt: #e07a45;
+      --mostaza: #d4932a; --mostaza-lt: #f0b84a;
+      --verde: #4a7c59; --verde-lt: #6aab7a; --verde-dk: #325a3e;
+      --ocre: #8b6635; --marron: #4a2e15;
+      --texto: #3d2810; --muted: #8a6e52; --line: rgba(139,102,53,.2);
+      --sidebar-w: 260px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: 'Nunito', sans-serif; background: var(--hueso); color: var(--texto); font-size: 14px; }
+
+    /* STRIPE */
+    .andean-stripe-thin {
+      height: 6px;
+      background: repeating-linear-gradient(90deg,
+        #c4622d 0,#c4622d 10px,#d4932a 10px,#d4932a 20px,
+        #4a7c59 20px,#4a7c59 30px,#4a2e15 30px,#4a2e15 40px,
+        #f0b84a 40px,#f0b84a 50px,#e07a45 50px,#e07a45 60px);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: var(--sidebar-w);
+      height: 100vh; background: var(--marron); z-index: 200;
+      display: flex; flex-direction: column; overflow: hidden;
+      transition: transform .3s ease;
+    }
+    .sidebar-brand {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .brand-flower { font-size: 2rem; animation: wiggle 3s ease-in-out infinite; }
+    .brand-text { line-height: 1.2; }
+    .brand-name { font-family: 'Caveat', cursive; font-size: 1.3rem; font-weight: 700; color: var(--mostaza-lt); }
+    .brand-sub { font-size: .7rem; color: rgba(255,255,255,.4); letter-spacing: .08em; text-transform: uppercase; }
+
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 1rem 0; }
+    .nav-section { padding: .4rem 1.25rem .2rem; font-size: .65rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-top: .5rem; }
+    .nav-link-s {
+      display: flex; align-items: center; gap: .7rem; padding: .6rem 1.25rem;
+      color: rgba(255,255,255,.6); text-decoration: none; font-size: .875rem; font-weight: 600;
+      transition: all .2s; border-left: 3px solid transparent; cursor: pointer;
+    }
+    .nav-link-s:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .nav-link-s.active { background: rgba(196,98,45,.25); color: white; border-left-color: var(--terracota); }
+    .nav-link-s i { font-size: 1rem; width: 18px; text-align: center; }
+    .nav-badge { margin-left: auto; background: var(--terracota); color: white; font-size: .65rem;
+      padding: .1rem .45rem; border-radius: 99px; font-weight: 700; }
+
+    .sidebar-user {
+      padding: 1rem 1.25rem; border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--terracota), var(--mostaza));
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; color: white; flex-shrink: 0;
+    }
+    .user-info .user-name { font-size: .875rem; font-weight: 700; color: rgba(255,255,255,.85); }
+    .user-info .user-role { font-size: .7rem; color: var(--mostaza-lt); }
+    .btn-logout {
+      margin-left: auto; background: rgba(255,255,255,.08); border: none;
+      color: rgba(255,255,255,.5); width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s;
+    }
+    .btn-logout:hover { background: rgba(196,98,45,.4); color: white; }
+
+    /* TOPBAR */
+    .main-content { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+    .topbar {
+      background: white; border-bottom: 2px solid var(--hueso-3);
+      padding: .8rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+      position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(78,46,21,.06);
+    }
+    .topbar-title { font-family: 'Caveat', cursive; font-size: 1.4rem; font-weight: 700; color: var(--terracota); flex: 1; }
+    .topbar-date { font-size: .8rem; color: var(--muted); }
+    .btn-menu-toggle { display: none; background: none; border: none; font-size: 1.3rem; color: var(--texto); cursor: pointer; }
+
+    /* PAGES */
+    .page { display: none; padding: 1.5rem; animation: fadeIn .3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CARDS */
+    .stat-card {
+      background: white; border-radius: 16px; border: 2px solid var(--hueso-3);
+      padding: 1.25rem; display: flex; align-items: center; gap: 1rem;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(78,46,21,.1); }
+    .stat-ico {
+      width: 52px; height: 52px; border-radius: 14px; display: flex;
+      align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0;
+    }
+    .stat-ico.terra { background: rgba(196,98,45,.12); }
+    .stat-ico.mostaza { background: rgba(212,147,42,.12); }
+    .stat-ico.verde { background: rgba(74,124,89,.12); }
+    .stat-ico.azul { background: rgba(74,114,196,.12); }
+    .stat-num { font-family: 'Caveat', cursive; font-size: 1.8rem; font-weight: 700; color: var(--texto); line-height: 1; }
+    .stat-label { font-size: .78rem; color: var(--muted); font-weight: 600; }
+    .stat-delta { font-size: .72rem; margin-top: .2rem; font-weight: 700; }
+    .stat-delta.up { color: var(--verde); } .stat-delta.down { color: var(--terracota); }
+
+    .panel-card {
+      background: white; border-radius: 16px; border: 2px solid var(--hueso-3);
+      overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .panel-header {
+      padding: 1rem 1.25rem; border-bottom: 1.5px solid var(--hueso-3);
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(90deg, var(--hueso) 0%, white 100%);
+    }
+    .panel-title { font-family: 'Caveat', cursive; font-size: 1.2rem; font-weight: 700; color: var(--terracota); }
+    .panel-body { padding: 1.25rem; }
+
+    /* TABLE */
+    .table-flor { width: 100%; border-collapse: collapse; }
+    .table-flor th { background: var(--hueso-2); font-size: .72rem; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--muted); font-weight: 700; padding: .6rem .75rem;
+      border-bottom: 1.5px solid var(--hueso-3); text-align: left; }
+    .table-flor td { padding: .65rem .75rem; border-bottom: 1px solid var(--hueso-3);
+      font-size: .875rem; vertical-align: middle; }
+    .table-flor tr:last-child td { border-bottom: none; }
+    .table-flor tr:hover td { background: var(--hueso); }
+
+    .badge-flor {
+      display: inline-block; padding: .2rem .65rem; border-radius: 99px;
+      font-size: .7rem; font-weight: 700;
+    }
+    .badge-ok { background: rgba(74,124,89,.12); color: var(--verde-dk); }
+    .badge-low { background: rgba(212,147,42,.15); color: #8a6000; }
+    .badge-out { background: rgba(196,98,45,.12); color: var(--terra-dk); }
+
+    /* FORMS */
+    .form-flor-label { font-size: .78rem; font-weight: 700; color: var(--muted); text-transform: uppercase;
+      letter-spacing: .06em; display: block; margin-bottom: .3rem; }
+    .form-flor-input, .form-flor-select, .form-flor-textarea {
+      width: 100%; background: var(--hueso-2); border: 2px solid var(--hueso-3);
+      border-radius: 10px; padding: .55rem .9rem; font-family: 'Nunito', sans-serif;
+      font-size: .875rem; color: var(--texto); outline: none; transition: border-color .2s;
+    }
+    .form-flor-input:focus, .form-flor-select:focus, .form-flor-textarea:focus {
+      border-color: var(--terracota); box-shadow: 0 0 0 3px rgba(196,98,45,.1);
+    }
+    .form-flor-textarea { resize: vertical; min-height: 80px; }
+
+    .btn-flor {
+      border: none; border-radius: 10px; padding: .55rem 1.25rem;
+      font-family: 'Nunito', sans-serif; font-size: .875rem; font-weight: 700;
+      cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: .4rem;
+    }
+    .btn-terra { background: var(--terracota); color: white; box-shadow: 0 3px 10px rgba(196,98,45,.3); }
+    .btn-terra:hover { background: var(--terra-dk); transform: translateY(-1px); }
+    .btn-verde { background: var(--verde); color: white; }
+    .btn-verde:hover { background: var(--verde-dk); }
+    .btn-mostaza { background: var(--mostaza); color: var(--marron); }
+    .btn-mostaza:hover { background: #c4830a; }
+    .btn-outline { background: transparent; border: 2px solid var(--line); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--muted); color: var(--texto); }
+    .btn-danger { background: #e53e3e; color: white; }
+    .btn-danger:hover { background: #c53030; }
+    .btn-sm-flor { padding: .3rem .7rem; font-size: .78rem; }
+
+    /* UPLOAD ZONE */
+    .upload-zone {
+      border: 2.5px dashed var(--mostaza); border-radius: 14px;
+      padding: 2rem; text-align: center; cursor: pointer;
+      background: var(--hueso-2); transition: all .25s;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      background: rgba(212,147,42,.08); border-color: var(--terracota);
+    }
+    .upload-zone .up-ico { font-size: 2.5rem; margin-bottom: .5rem; display: block; }
+    .upload-zone p { font-size: .875rem; color: var(--muted); margin: 0; }
+    .upload-zone strong { color: var(--terracota); }
+
+    .foto-thumb {
+      aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative;
+      border: 2px solid var(--hueso-3); cursor: pointer;
+    }
+    .foto-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .foto-thumb .del-btn {
+      position: absolute; top: 4px; right: 4px; background: rgba(196,98,45,.85);
+      color: white; border: none; width: 24px; height: 24px; border-radius: 50%;
+      font-size: .7rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s;
+    }
+    .foto-thumb:hover .del-btn { opacity: 1; }
+    .foto-thumb .foto-badge {
+      position: absolute; bottom: 4px; left: 4px; right: 4px;
+      background: rgba(0,0,0,.6); color: white; font-size: .65rem; font-weight: 700;
+      padding: .1rem .35rem; border-radius: 5px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* TRABAJADORES */
+    .worker-card {
+      background: white; border-radius: 14px; border: 2px solid var(--hueso-3);
+      padding: 1.1rem; transition: border-color .25s, transform .25s;
+    }
+    .worker-card:hover { border-color: var(--mostaza); transform: translateY(-2px); }
+    .worker-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--terracota), var(--mostaza));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Caveat', cursive; font-size: 1.3rem; color: white; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .worker-name { font-weight: 700; color: var(--texto); font-size: .9rem; }
+    .worker-role { font-size: .75rem; color: var(--verde-dk); font-weight: 600; }
+    .worker-salary { font-family: 'Caveat', cursive; font-size: 1.2rem; color: var(--terracota); font-weight: 700; }
+
+    /* CHART CONTAINERS */
+    .chart-wrap { position: relative; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .btn-menu-toggle { display: flex; }
+      .topbar { padding: .7rem 1rem; }
+      .page { padding: 1rem; }
+    }
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
+      z-index: 199; cursor: pointer;
+    }
+    .sidebar-overlay.active { display: block; }
+
+    @keyframes wiggle {
+      0%,100% { transform: rotate(0); }
+      20% { transform: rotate(-8deg); }
+      40% { transform: rotate(8deg); }
+      60% { transform: rotate(-4deg); }
+      80% { transform: rotate(4deg); }
+    }
+
+    /* TOAST */
+    #toast-container {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+      display: flex; flex-direction: column; gap: .5rem; align-items: flex-end;
+    }
+    .toast-msg {
+      background: var(--marron); color: white; border-radius: 12px; padding: .7rem 1.2rem;
+      font-size: .875rem; font-weight: 600; box-shadow: 0 6px 20px rgba(0,0,0,.25);
+      animation: toastIn .3s ease; display: flex; align-items: center; gap: .5rem;
+      max-width: 320px;
+    }
+    .toast-msg.success { border-left: 4px solid var(--verde-lt); }
+    .toast-msg.error { border-left: 4px solid var(--terracota); }
+    @keyframes toastIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform:translateX(0); } }
+
+    /* MODAL */
+    .modal-flor .modal-content { border-radius: 20px; border: 2px solid var(--hueso-3); }
+    .modal-flor .modal-header { background: linear-gradient(90deg, var(--hueso), white); border-bottom: 1.5px solid var(--hueso-3); }
+    .modal-flor .modal-title { font-family: 'Caveat', cursive; font-size: 1.3rem; color: var(--terracota); }
+
+    .progress-bar-flor {
+      height: 8px; border-radius: 99px; background: var(--hueso-3); overflow: hidden; margin-bottom: .25rem;
+    }
+    .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--terracota), var(--mostaza)); transition: width .6s ease; }
+    .progress-fill.verde { background: linear-gradient(90deg, var(--verde), var(--verde-lt)); }
+  </style>
+</head>
+<body>
+
+<div class="andean-stripe-thin"></div>
+<div id="toast-container"></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-flower">🌸</div>
+    <div class="brand-text">
+      <div class="brand-name">Encantos Eternos</div>
+      <div class="brand-sub">Panel Admin</div>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Principal</div>
+    <a class="nav-link-s active" onclick="showPage('dashboard')"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a class="nav-link-s" onclick="showPage('ventas')"><i class="bi bi-graph-up-arrow"></i> Estadísticas</a>
+
+    <div class="nav-section">Tienda</div>
+    <a class="nav-link-s" onclick="showPage('productos')"><i class="bi bi-flower1"></i> Productos</a>
+    <a class="nav-link-s" onclick="showPage('inventario')"><i class="bi bi-box-seam"></i> Inventario</a>
+    <a class="nav-link-s" onclick="showPage('fotos')"><i class="bi bi-images"></i> Fotos / Galería</a>
+
+    <div class="nav-section">Finanzas</div>
+    <a class="nav-link-s" onclick="showPage('egresos')"><i class="bi bi-cash-stack"></i> Egresos</a>
+
+    <div class="nav-section">Personal</div>
+    <a class="nav-link-s" onclick="showPage('trabajadores')"><i class="bi bi-people"></i> Trabajadores</a>
+
+    <div class="nav-section">Sistema</div>
+    <a class="nav-link-s" onclick="window.open('index.html','_blank')"><i class="bi bi-shop"></i> Ver tienda</a>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar">👤</div>
+    <div class="user-info">
+      <div class="user-name" id="sidebarUserName">Admin</div>
+      <div class="user-role">Administrador</div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()" title="Cerrar sesión"><i class="bi bi-box-arrow-right"></i></button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="topbar">
+    <button class="btn-menu-toggle" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
+    <div class="topbar-title" id="topbarTitle">🌸 Dashboard</div>
+    <div class="topbar-date" id="topbarDate"></div>
+  </div>
+
+  <!-- ============================
+       PAGE: DASHBOARD
+  ============================= -->
+  <div class="page active" id="page-dashboard">
+    <!-- Stats row -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-ico terra">💰</div>
+          <div>
+            <div class="stat-num" id="stat-ingresos">S/ 0</div>
+            <div class="stat-label">Ingresos este mes</div>
+            <div class="stat-delta up" id="stat-ing-delta">↑ 0%</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-ico mostaza">🛒</div>
+          <div>
+            <div class="stat-num" id="stat-ventas">0</div>
+            <div class="stat-label">Ventas este mes</div>
+            <div class="stat-delta up" id="stat-ven-delta">↑ 0%</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-ico verde">📦</div>
+          <div>
+            <div class="stat-num" id="stat-stock">0</div>
+            <div class="stat-label">Items en stock</div>
+            <div class="stat-delta" id="stat-stock-delta" style="color:var(--muted)">— total</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-ico azul">👥</div>
+          <div>
+            <div class="stat-num" id="stat-trabajadores">0</div>
+            <div class="stat-label">Trabajadores activos</div>
+            <div class="stat-delta" style="color:var(--muted)">En planilla</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-8">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">📊 Ventas de los últimos 7 días</div>
+          </div>
+          <div class="panel-body chart-wrap" style="height:280px">
+            <canvas id="chartVentas7"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">🌸 Top productos</div>
+          </div>
+          <div class="panel-body" id="topProductsList" style="min-height:200px"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">⚠️ Stock bajo</div>
+            <a onclick="showPage('inventario')" class="btn-flor btn-outline btn-sm-flor" style="cursor:pointer">Ver todo</a>
+          </div>
+          <div class="panel-body" id="lowStockList"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">💸 Últimos egresos</div>
+            <a onclick="showPage('egresos')" class="btn-flor btn-outline btn-sm-flor" style="cursor:pointer">Ver todo</a>
+          </div>
+          <div class="panel-body" id="lastEgresosList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       PAGE: ESTADÍSTICAS
+  ============================= -->
+  <div class="page" id="page-ventas">
+    <!-- Registrar venta -->
+    <div class="panel-card mb-4">
+      <div class="panel-header">
+        <div class="panel-title">🛒 Registrar nueva venta</div>
+      </div>
+      <div class="panel-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-flor-label">Producto</label>
+            <select class="form-flor-select" id="ventaProducto"></select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-flor-label">Cantidad</label>
+            <input type="number" class="form-flor-input" id="ventaCantidad" value="1" min="1"/>
+          </div>
+          <div class="col-md-2">
+            <label class="form-flor-label">Precio (S/)</label>
+            <input type="number" class="form-flor-input" id="ventaPrecio" step="0.50"/>
+          </div>
+          <div class="col-md-2">
+            <label class="form-flor-label">Fecha</label>
+            <input type="date" class="form-flor-input" id="ventaFecha"/>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn-flor btn-terra w-100" onclick="registrarVenta()"><i class="bi bi-plus-circle"></i> Registrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="panel-card mb-4">
+      <div class="panel-header">
+        <div class="panel-title">📈 Análisis de ventas</div>
+        <div class="d-flex gap-2">
+          <select class="form-flor-select" id="filtroVentasPeriodo" onchange="actualizarGraficas()" style="width:auto;padding:.35rem .7rem">
+            <option value="7">7 días</option>
+            <option value="30" selected>30 días</option>
+            <option value="90">3 meses</option>
+          </select>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="row g-4">
+          <div class="col-md-8">
+            <div class="chart-wrap" style="height:260px">
+              <canvas id="chartVentasPeriodo"></canvas>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="chart-wrap" style="height:260px">
+              <canvas id="chartTopProd"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla ventas -->
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="panel-title">📋 Historial de ventas</div>
+        <button class="btn-flor btn-outline btn-sm-flor" onclick="exportarVentas()"><i class="bi bi-download"></i> Exportar</button>
+      </div>
+      <div class="panel-body" style="overflow-x:auto">
+        <table class="table-flor" id="tablaVentas">
+          <thead><tr>
+            <th>Fecha</th><th>Producto</th><th>Cant.</th><th>Precio</th><th>Total</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="tablaVentasBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       PAGE: PRODUCTOS
+  ============================= -->
+  <div class="page" id="page-productos">
+    <div class="panel-card mb-4">
+      <div class="panel-header">
+        <div class="panel-title">🌹 Gestión de Productos</div>
+        <button class="btn-flor btn-terra" onclick="abrirModalProducto()"><i class="bi bi-plus-circle"></i> Nuevo producto</button>
+      </div>
+      <div class="panel-body" style="overflow-x:auto">
+        <table class="table-flor">
+          <thead><tr>
+            <th>Emoji</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Precio ant.</th><th>Etiqueta</th><th>Stock</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="tablaProductosBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       PAGE: INVENTARIO
+  ============================= -->
+  <div class="page" id="page-inventario">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-ico verde">📦</div>
+          <div><div class="stat-num" id="inv-total">0</div><div class="stat-label">Total items</div></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-ico mostaza">⚠️</div>
+          <div><div class="stat-num" id="inv-bajo">0</div><div class="stat-label">Stock bajo (≤3)</div></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-ico terra">❌</div>
+          <div><div class="stat-num" id="inv-agotado">0</div><div class="stat-label">Agotados</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="panel-title">📦 Control de Inventario</div>
+        <button class="btn-flor btn-verde" onclick="abrirModalAjuste()"><i class="bi bi-plus-minus"></i> Ajustar stock</button>
+      </div>
+      <div class="panel-body" style="overflow-x:auto">
+        <table class="table-flor">
+          <thead><tr>
+            <th>Producto</th><th>Stock actual</th><th>Estado</th><th>Stock mínimo</th><th>Actualizar</th>
+          </tr></thead>
+          <tbody id="tablaInventarioBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel-card mt-3">
+      <div class="panel-header"><div class="panel-title">📋 Historial de movimientos</div></div>
+      <div class="panel-body" style="overflow-x:auto">
+        <table class="table-flor">
+          <thead><tr><th>Fecha</th><th>Producto</th><th>Movimiento</th><th>Stock resultante</th><th>Nota</th></tr></thead>
+          <tbody id="tablaMovimientosBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       PAGE: FOTOS / GALERÍA
+  ============================= -->
+  <div class="page" id="page-fotos">
+    <div class="panel-card mb-4">
+      <div class="panel-header">
+        <div class="panel-title">📸 Subir fotos a la tienda</div>
+        <span style="font-size:.8rem;color:var(--muted)">Las fotos aparecen en la tienda automáticamente</span>
+      </div>
+      <div class="panel-body">
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-flor-label">Sección destino</label>
+            <select class="form-flor-select" id="fotoSeccion">
+              <option value="galeria">🖼️ Galería principal</option>
+              <option value="hero">🌺 Imagen Hero (portada)</option>
+              <option value="productos">🌹 Foto de producto</option>
+              <option value="eventos">🎉 Foto de eventos</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-flor-label">Título / descripción</label>
+            <input type="text" class="form-flor-input" id="fotoTitulo" placeholder="Ej: Ramo de novias..."/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-flor-label">Producto (opcional)</label>
+            <select class="form-flor-select" id="fotoProductoRelacion">
+              <option value="">— Sin producto asociado —</option>
+            </select>
+          </div>
+        </div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fotoInput').click()">
+          <span class="up-ico">📷</span>
+          <p><strong>Haz clic o arrastra fotos aquí</strong></p>
+          <p style="margin-top:.25rem">PNG, JPG, WebP · Máx. 5MB por foto</p>
+        </div>
+        <input type="file" id="fotoInput" accept="image/*" multiple style="display:none" onchange="procesarFotos(this.files)"/>
+        <div id="fotoPreview" class="row g-2 mt-3"></div>
+        <div class="mt-3 d-flex gap-2">
+          <button class="btn-flor btn-terra" onclick="guardarFotos()"><i class="bi bi-cloud-upload"></i> Guardar en tienda</button>
+          <button class="btn-flor btn-outline" onclick="limpiarPreview()"><i class="bi bi-trash"></i> Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="panel-title">🖼️ Fotos guardadas</div>
+        <span id="totalFotos" style="font-size:.8rem;color:var(--muted)">0 fotos</span>
+      </div>
+      <div class="panel-body">
+        <div class="d-flex gap-2 mb-3 flex-wrap">
+          <button class="btn-flor btn-outline btn-sm-flor filtro-foto-btn active" data-seccion="todas" onclick="filtrarFotos('todas',this)">Todas</button>
+          <button class="btn-flor btn-outline btn-sm-flor filtro-foto-btn" data-seccion="galeria" onclick="filtrarFotos('galeria',this)">🖼️ Galería</button>
+          <button class="btn-flor btn-outline btn-sm-flor filtro-foto-btn" data-seccion="hero" onclick="filtrarFotos('hero',this)">🌺 Hero</button>
+          <button class="btn-flor btn-outline btn-sm-flor filtro-foto-btn" data-seccion="productos" onclick="filtrarFotos('productos',this)">🌹 Productos</button>
+          <button class="btn-flor btn-outline btn-sm-flor filtro-foto-btn" data-seccion="eventos" onclick="filtrarFotos('eventos',this)">🎉 Eventos</button>
+        </div>
+        <div class="row g-2" id="galeriaAdmin"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       PAGE: EGRESOS
+  ============================= -->
+  <div class="page" id="page-egresos">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-ico terra">💸</div>
+          <div><div class="stat-num" id="eg-mes">S/ 0</div><div class="stat-label">Egresos este mes</div></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-ico mostaza">📅</div>
+          <div><div class="stat-num" id="eg-semana">S/ 0</div><div class="stat-label">Egresos esta semana</div></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-ico verde">📊</div>
+          <div><div class="stat-num" id="eg-balance">S/ 0</div><div class="stat-label">Balance (ing - eg)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card mb-4">
+      <div class="panel-header"><div class="panel-title">➕ Nuevo egreso</div></div>
+      <div class="panel-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-flor-label">Categoría</label>
+            <select class="form-flor-select" id="egresoCategoria">
+              <option value="flores">🌸 Compra de flores</option>
+              <option value="materiales">🎀 Materiales</option>
+              <option value="salarios">👥 Salarios</option>
+              <option value="servicios">💡 Servicios (luz, agua)</option>
+              <option value="transporte">🚚 Transporte</option>
+              <option value="otros">📦 Otros</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-flor-label">Descripción</label>
+            <input type="text" class="form-flor-input" id="egresoDesc" placeholder="Ej: Compra rosas cusco..."/>
+          </div>
+          <div class="col-md-2">
+            <label class="form-flor-label">Monto (S/)</label>
+            <input type="number" class="form-flor-input" id="egresoMonto" step="0.50" min="0" placeholder="0.00"/>
+          </div>
+          <div class="col-md-2">
+            <label class="form-flor-label">Fecha</label>
+            <input type="date" class="form-flor-input" id="egresoFecha"/>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn-flor btn-terra w-100" onclick="registrarEgreso()"><i class="bi bi-plus-circle"></i> Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card mb-4">
+      <div class="panel-header"><div class="panel-title">📊 Egresos por categoría</div></div>
+      <div class="panel-body">
+        <div class="row g-3">
+          <div class="col-md-6"><div class="chart-wrap" style="height:220px"><canvas id="chartEgresosCat"></canvas></div></div>
+          <div class="col-md-6" id="egresosResumenCat"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-header">
+        <div class="panel-title">📋 Historial de egresos</div>
+        <button class="btn-flor btn-outline btn-sm-flor" onclick="exportarEgresos()"><i class="bi bi-download"></i> Exportar</button>
+      </div>
+      <div class="panel-body" style="overflow-x:auto">
+        <table class="table-flor">
+          <thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Acciones</th></tr></thead>
+          <tbody id="tablaEgresosBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       PAGE: TRABAJADORES
+  ============================= -->
+  <div class="page" id="page-trabajadores">
+    <div class="panel-card mb-4">
+      <div class="panel-header">
+        <div class="panel-title">👥 Equipo Encantos Eternos</div>
+        <button class="btn-flor btn-terra" onclick="abrirModalTrabajador()"><i class="bi bi-person-plus"></i> Nuevo trabajador</button>
+      </div>
+      <div class="panel-body">
+        <div class="row g-3" id="gridTrabajadores"></div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-header"><div class="panel-title">💰 Planilla del mes</div></div>
+      <div class="panel-body" style="overflow-x:auto">
+        <table class="table-flor">
+          <thead><tr><th>Trabajador</th><th>Cargo</th><th>Sueldo base</th><th>Bonos</th><th>Descuentos</th><th>Total a pagar</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody id="tablaPlanillaBody"></tbody>
+        </table>
+        <div class="mt-3 d-flex justify-content-end align-items-center gap-3">
+          <strong style="color:var(--muted)">Total planilla:</strong>
+          <span id="totalPlanilla" style="font-family:'Caveat',cursive;font-size:1.5rem;color:var(--terracota);font-weight:700">S/ 0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+
+<!-- MODALES -->
+
+<!-- Modal Producto -->
+<div class="modal fade modal-flor" id="modalProducto" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalProductoTitle">🌸 Nuevo Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="prodId"/>
+        <div class="row g-3">
+          <div class="col-md-2">
+            <label class="form-flor-label">Emoji</label>
+            <input type="text" class="form-flor-input" id="prodEmoji" placeholder="🌹" maxlength="4"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Nombre del producto</label>
+            <input type="text" class="form-flor-input" id="prodNombre" placeholder="Ej: Docena de Rosas Rojas..."/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-flor-label">Etiqueta</label>
+            <select class="form-flor-select" id="prodEtiqueta">
+              <option value="">Sin etiqueta</option>
+              <option value="Nuevo">🆕 Nuevo</option>
+              <option value="Oferta">🏷️ Oferta</option>
+              <option value="Favorito">⭐ Favorito</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-flor-label">Descripción</label>
+            <textarea class="form-flor-textarea" id="prodDesc" placeholder="Describe el producto..."></textarea>
+          </div>
+          <div class="col-md-3">
+            <label class="form-flor-label">Precio (S/)</label>
+            <input type="number" class="form-flor-input" id="prodPrecio" step="0.50" min="0"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-flor-label">Precio anterior (S/)</label>
+            <input type="number" class="form-flor-input" id="prodPrecioAnt" step="0.50" min="0" placeholder="0 = sin tachado"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-flor-label">Stock inicial</label>
+            <input type="number" class="form-flor-input" id="prodStock" min="0" value="0"/>
+          </div>
+          <div class="col-md-3">
+            <label class="form-flor-label">Categorías</label>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+              <label style="font-size:.8rem;display:flex;align-items:center;gap:.3rem;cursor:pointer">
+                <input type="checkbox" id="catAmor" value="amor"/> Amor ❤️</label>
+              <label style="font-size:.8rem;display:flex;align-items:center;gap:.3rem;cursor:pointer">
+                <input type="checkbox" id="catAniversario" value="aniversario"/> Aniversario 💍</label>
+              <label style="font-size:.8rem;display:flex;align-items:center;gap:.3rem;cursor:pointer">
+                <input type="checkbox" id="catCumple" value="cumpleanos"/> Cumpleaños 🎂</label>
+              <label style="font-size:.8rem;display:flex;align-items:center;gap:.3rem;cursor:pointer">
+                <input type="checkbox" id="catCondolencias" value="condolencias"/> Condolencias 🕊️</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-flor btn-outline" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn-flor btn-terra" onclick="guardarProducto()"><i class="bi bi-check-circle"></i> Guardar producto</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Trabajador -->
+<div class="modal fade modal-flor" id="modalTrabajador" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTrabTitle">👤 Nuevo Trabajador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="trabId"/>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-flor-label">Nombre completo</label>
+            <input type="text" class="form-flor-input" id="trabNombre" placeholder="Nombre y apellidos..."/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Cargo</label>
+            <select class="form-flor-select" id="trabCargo">
+              <option value="Florista">🌸 Florista</option>
+              <option value="Vendedora">💁 Vendedora</option>
+              <option value="Repartidor">🛵 Repartidor</option>
+              <option value="Cajera">💰 Cajera</option>
+              <option value="Administradora">📋 Administradora</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Teléfono</label>
+            <input type="text" class="form-flor-input" id="trabTelefono" placeholder="+51 9..."/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Fecha de ingreso</label>
+            <input type="date" class="form-flor-input" id="trabIngreso"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Sueldo base (S/)</label>
+            <input type="number" class="form-flor-input" id="trabSueldo" step="50" min="0" placeholder="1200"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Estado</label>
+            <select class="form-flor-select" id="trabEstado">
+              <option value="activo">✅ Activo</option>
+              <option value="inactivo">❌ Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-flor btn-outline" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn-flor btn-terra" onclick="guardarTrabajador()"><i class="bi bi-check-circle"></i> Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ajuste Stock -->
+<div class="modal fade modal-flor" id="modalAjuste" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">📦 Ajustar stock</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-flor-label">Producto</label>
+            <select class="form-flor-select" id="ajusteProducto"></select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Tipo de movimiento</label>
+            <select class="form-flor-select" id="ajusteTipo">
+              <option value="entrada">📥 Entrada (compra)</option>
+              <option value="salida">📤 Salida (venta/daño)</option>
+              <option value="ajuste">🔄 Ajuste manual</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-flor-label">Cantidad</label>
+            <input type="number" class="form-flor-input" id="ajusteCantidad" min="1" value="1"/>
+          </div>
+          <div class="col-12">
+            <label class="form-flor-label">Nota (opcional)</label>
+            <input type="text" class="form-flor-input" id="ajusteNota" placeholder="Ej: Compra mercado Sicuani..."/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-flor btn-outline" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn-flor btn-terra" onclick="guardarAjuste()"><i class="bi bi-check-circle"></i> Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="auth.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
