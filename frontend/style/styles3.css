@@ -603,3 +603,118 @@ nav.navbar {
   .navbar-collapse.show { display: block !important; }
   .cart-nav-item { display: block !important; }
 }
+
+
+
+/* ===================================================
+   BOTONES FLOTANTES
+=================================================== */
+.floating-btn {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    padding: 22px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition);
+    z-index: 800;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+.floating-btn:hover {
+    transform: translateY(-3px) translateX(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+.btn-icon { 
+    font-size: 1.1rem; 
+    line-height: 1;
+}
+
+.btn-text {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+
+.map-btn    { 
+    bottom: 148px; 
+    right: 35px; 
+    background-image: url(mapa.png);
+    background-size: cover;      /* que cubra todo */
+    background-position: center; /* centrada */
+    background-repeat: no-repeat;/* sin repetir */
+}
+.chat-btn   { 
+    bottom: 96px;  
+    right: 35px; 
+    background-image:url("whatsapp.png");
+    background-size: cover;      /* que cubra todo */
+    background-position: center; /* centrada */
+    background-repeat: no-repeat;/* sin repetir */
+}
+
+/* Ventanas flotantes */
+.floating-window {
+    position: fixed;
+    bottom: 90px;
+    right: 90px;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    background: var(--verde-lt);
+    border-radius: 20px;
+    border: 2px solid var(--verde-dk);
+    z-index: 850;
+    overflow: hidden;
+    transition: all var(--transition);
+    transform-origin: bottom right;
+}
+
+.floating-window.oculto {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9) translateY(15px);
+}
+
+.window-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--color-tierra) 0%, var(--color-acento) 100%);
+    color: var(--color-crema);
+}
+
+.window-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.window-body { 
+    padding: 18px;
+}
+
+/* ===================================================
+   BOTÓN CERRAR (genérico)
+=================================================== */
+.close-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.75;
+    padding: 5px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+}
+
+.close-btn:hover {
+    opacity: 1;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(90deg);
+}

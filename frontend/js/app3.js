@@ -289,3 +289,41 @@ if (!document.querySelector('#flowerFallStyle')) {
 }
 
 window.loadProducts = loadProducts;
+
+
+
+
+/* ===================================================
+   5. BOTONES FLOTANTES (Mapa)
+=================================================== */
+(function initFloatingWindows() {
+    const pairs = [
+        { btnId: 'mapa-boton',        winId: 'mapa-ventana',        closeId: 'closeMapa'   },
+    ];
+
+    pairs.forEach(({ btnId, winId, closeId }) => {
+        const btn    = document.getElementById(btnId);
+        const win    = document.getElementById(winId);
+        const closeB = document.getElementById(closeId);
+        if (!btn || !win) return;
+
+        const toggle = () => win.classList.toggle('oculto');
+        const hide   = () => win.classList.add('oculto');
+
+        btn.addEventListener('click', toggle);
+        btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggle(); });
+        closeB?.addEventListener('click', hide);
+    });
+
+    // Cerrar ventanas al hacer clic fuera
+    document.addEventListener('click', e => {
+        pairs.forEach(({ btnId, winId }) => {
+            const btn = document.getElementById(btnId);
+            const win = document.getElementById(winId);
+            if (!win || win.classList.contains('oculto')) return;
+            if (!win.contains(e.target) && !btn.contains(e.target)) {
+                win.classList.add('oculto');
+            }
+        });
+    });
+})();
