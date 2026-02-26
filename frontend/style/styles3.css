@@ -7,6 +7,7 @@
 
 :root {
   --hueso:       #fdf8f0;
+  --moradito:    #bc4bc8;
   --hueso-2:     #f5ede0;
   --hueso-3:     #ede0cc;
   --terracota:   #c4622d;
@@ -62,7 +63,7 @@ body {
 
 /* AVISO SUPERIOR */
 .top-aviso {
-  background: var(--verde-dk);
+  background: var(--moradito);
   color: var(--hueso);
   font-size: 12.5px;
   text-align: center;
@@ -216,7 +217,7 @@ nav.navbar {
 }
 
 /* SERVICIOS */
-.servicios3 { background: var(--verde-dk); padding: 2.5rem 0; }
+.servicios3 { background: var(--moradito); padding: 2.5rem 0; }
 .svc3-card {
   text-align: center; padding: 1.5rem 1rem; color: white;
   border-right: 1px solid rgba(255,255,255,.12); transition: background .2s;
@@ -469,16 +470,136 @@ nav.navbar {
 }
 
 /* RESPONSIVE */
+@media (max-width: 1199px) {
+  .hero3-visual { width: 350px; height: 350px; }
+  .hero3-circle-bg { width: 300px; height: 300px; }
+  .hero3-big-flower { font-size: 7rem; }
+}
+
 @media (max-width: 991px) {
   .hero3 { padding: 1rem 0; }
+  .hero3-content { text-align: center; padding: 2rem 0; }
+  .hero3-sub { margin: 0 auto 1.75rem; }
+  .hero3-ctas { justify-content: center; }
+  .trust-chips { justify-content: center; }
   .search3-form { width: 100%; margin-top: 1rem; }
   .search3-input { width: 100%; }
   .svc3-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); }
   .svc3-card:last-child { border-bottom: none; }
+  .hero3-visual { display: none; }
+  .logo3-name { font-size: 1.35rem; }
+  .logo3-sub { font-size: 9px; }
+  .nav-link3 { padding: .5rem 1rem !important; }
+  .navbar-collapse { background: var(--hueso); padding: 1rem; margin-top: 0.5rem; border-radius: 8px; }
+  .filter3-wrap { gap: 0.5rem !important; }
+  .btn3-filter { padding: 0.4rem 0.8rem; font-size: 12px; }
 }
+
+@media (max-width: 767px) {
+  .top-aviso { flex-direction: column; gap: 0.25rem !important; padding: 0.6rem; font-size: 11px; }
+  .top-aviso span:first-child, .top-aviso span:last-child { display: none; }
+  
+  .hero3-title { font-size: 1.8rem; }
+  .title-florito { font-size: 2.5rem; }
+  .handmade-tag { font-size: 0.95rem; }
+  .hero3-sub { font-size: 0.9rem; }
+  
+  .btn3-main { padding: 0.6rem 1.25rem; font-size: 13px; }
+  .btn3-sec { padding: 0.55rem 1.1rem; font-size: 13px; }
+  .chip { font-size: 10.5px; padding: 0.25rem 0.6rem; }
+  
+  .svc3-card { padding: 1rem 0.75rem; }
+  .svc3-ico { font-size: 1.6rem; }
+  .svc3-card strong { font-size: 1rem; }
+  .svc3-card p { font-size: 0.75rem; }
+  
+  .section3-title { font-size: 1.6rem; }
+  .section3-sub { font-size: 0.85rem; }
+  
+  .categorias3 { padding: 3rem 0 1.5rem; }
+  .filter3-wrap { padding: 0 0.5rem; }
+  
+  .ev3-card { margin-bottom: 1rem; }
+  .ev3-header { padding: 1.25rem; }
+  .ev3-ico { font-size: 2.5rem; }
+  .ev3-body { padding: 1rem 1.1rem 1.2rem; }
+  .ev3-title { font-size: 1.3rem; }
+  .ev3-desc { font-size: 0.8rem; }
+  .ev3-list li { font-size: 0.8rem; }
+  
+  .regalo3-feature { padding: 0.9rem; flex-direction: column; text-align: center; align-items: center; }
+  .regalo3-emoji { font-size: 1.8rem; }
+  .regalo3-feature h4 { font-size: 1.1rem; }
+  .rbox-content { padding: 1.5rem 1rem; }
+  .rbox-emoji { font-size: 3rem; }
+  .rbox-content h3 { font-size: 1.5rem; }
+  .rbox-new { font-size: 1.8rem; }
+  
+  .f3-brand { flex-direction: column; text-align: center; }
+  .f3-newsletter { align-items: center; }
+  .footer3-top { padding: 2.5rem 0 1.5rem; }
+  .footer3-pagos { text-align: center; }
+  .pagos-wrap { flex-wrap: wrap; justify-content: center; }
+}
+
 @media (max-width: 576px) {
   .hero3-title { font-size: 1.6rem; }
-  .title-florito { font-size: 2.8rem; }
-  .whatsapp-callout { padding: 1.75rem 1.25rem; }
-  .rbox-content { padding: 1.75rem 1.25rem; }
+  .title-florito { font-size: 2.2rem; }
+  .whatsapp-callout { padding: 1.5rem 1rem; }
+  .rbox-content { padding: 1.5rem 1rem; }
+  
+  .section3-title { font-size: 1.4rem; }
+  .btn3-wapp { padding: 0.7rem 1.5rem; font-size: 14px; }
+  
+  .f3-heading { font-size: 10px; }
+  .f3-links a { font-size: 0.8rem; }
+  .f3-contacto p { font-size: 0.8rem; }
+  
+  .btn3-top { width: 40px; height: 40px; font-size: 1rem; bottom: 1rem; right: 1rem; }
+  
+  .p3-img { height: 160px; }
+  .p3-emoji { font-size: 4rem; }
+  .p3-body { padding: 0.9rem; }
+  .p3-name { font-size: 1.15rem; }
+  .p3-desc { font-size: 0.75rem; }
+  .p3-footer { flex-direction: column; gap: 0.75rem; align-items: stretch; }
+  .btn3-comprar { width: 100%; text-align: center; }
+  
+  .whatsapp-callout { margin: 0 0.5rem; }
+  .eventos3 { padding: 3rem 0; }
+  .regalos3 { padding: 3rem 0; }
+  
+  .modal-dialog { margin: 0.5rem; }
+  .modal-body { padding: 1rem; }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+  .hero3-title { font-size: 1.4rem; }
+  .title-florito { font-size: 2rem; }
+  .logo3-name { font-size: 1.2rem; }
+  .logo3-flower { font-size: 1.6rem; }
+  
+  .btn3-main, .btn3-sec { padding: 0.5rem 1rem; font-size: 12px; }
+  
+  .trust-chips { gap: 0.4rem !important; }
+  .chip { font-size: 9.5px; padding: 0.2rem 0.5rem; }
+  
+  .filter3-wrap { gap: 0.35rem !important; }
+  .btn3-filter { padding: 0.35rem 0.6rem; font-size: 11px; }
+  
+  .rbox-top { font-size: 11px; padding: 0.6rem; }
+  .rbox-new { font-size: 1.5rem; }
+}
+
+/* Navbar toggler visibility */
+@media (min-width: 992px) {
+  .toggler3 { display: none !important; }
+}
+
+@media (max-width: 991px) {
+  .toggler3 { display: flex !important; }
+  .navbar-collapse:not(.show) { display: none !important; }
+  .navbar-collapse.show { display: block !important; }
+  .cart-nav-item { display: block !important; }
 }
