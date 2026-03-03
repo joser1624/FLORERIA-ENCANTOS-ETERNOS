@@ -124,7 +124,10 @@ nav.navbar {
 
 /* HERO */
 .hero3 {
-  background: linear-gradient(160deg, var(--hueso) 0%, var(--hueso-2) 50%, #f0e0cc 100%);
+  background: url(https://floreriasb.com.pe/wp-content/uploads/2023/10/flores-para-regalar.png);
+  background-position:center;
+  background-repeat: no-repeat;
+  background-size: cover;
   position: relative; overflow: hidden; padding: 1rem 0;
 }
 .hero3::before {
@@ -217,7 +220,7 @@ nav.navbar {
 }
 
 /* SERVICIOS */
-.servicios3 { background: var(--moradito); padding: 2.5rem 0; }
+.servicios3 { background: var(--moradito); padding: 0px; }
 .svc3-card {
   text-align: center; padding: 1.5rem 1rem; color: white;
   border-right: 1px solid rgba(255,255,255,.12); transition: background .2s;
